@@ -1,1 +1,35 @@
- 
+ name: CD Pipeline - Prod
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Trivy
+        run: |
+          sudo apt-get install -y wget apt-transport-https gnupg
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+          echo "deb https://aquasecurity.github.io/trivy-repo/deb generic main" | sudo tee /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update
+          sudo apt-get install -y trivy
+
+      - name: Scan image
+        run: |
+          trivy image salioubentediallo/intranet-newdeal:latest
+
+  deploy:
+    name: Deploy to Production
+    runs-on: self-hosted
+    needs: security-scan
+    steps:
+      - name: Pull and run Docker container
+        run: |
+          docker pull salioubentediallo/intranet-newdeal:latest
