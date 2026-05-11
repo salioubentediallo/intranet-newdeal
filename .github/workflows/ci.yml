@@ -22,6 +22,9 @@ jobs:
       - name: Build Docker image
         run: docker build -t saliou2026/intranet-newdeal:latest .
 
+      - name: Push image
+        run: docker push saliou2026/intranet-newdeal:latest
+
   scan:
     name: Scan securite
     runs-on: ubuntu-latest
@@ -38,10 +41,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y trivy
 
-      - name: Scan vulnerabilites
+      - name: Scan vulnerabilites image
         run: trivy image --exit-code 0 saliou2026/intranet-newdeal:latest
 
-      - name: Scan secrets
+      - name: Scan secrets code
         run: trivy fs --scanners secret .
 
   push:
