@@ -21,7 +21,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t salioubentediallo/intranet-newdeal:latest .
+          docker build -t saliou2026/intranet-newdeal:latest .
 
       - name: Install Trivy
         run: |
@@ -33,7 +33,7 @@ jobs:
 
       - name: Scan image for vulnerabilities
         run: |
-          trivy image salioubentediallo/intranet-newdeal:latest
+          trivy image saliou2026/intranet-newdeal:latest
 
       - name: Scan for secrets
         run: |
@@ -41,4 +41,4 @@ jobs:
 
       - name: Push image to Docker Hub
         run: |
-          docker push salioubentediallo/intranet-newdeal:latest
+          docker push saliou2026/intranet-newdeal:latest
